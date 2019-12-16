@@ -22,6 +22,11 @@ const Nav = () => (
           <a href={href}>{label}</a>
         </li>
       ))}
+      <li>
+        <Link href="login">
+          <a>Login</a>
+        </Link>
+      </li>
     </ul>
 
     <style jsx>{`
