@@ -3,13 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "next",
+    "preserve": "npm run build-public && npm run build-funcs && npm run build-app && npm run copy-deps && npm run install-deps",
+    "serve": "NODE_ENV=production firebase serve",
+    "predeploy": "npm run build-public && npm run build-funcs && npm run build-app && npm run copy-deps",
+    "deploy": "NODE_ENV=production firebase deploy",
+    "clean": "rimraf \"dist/functions/**\"",
+    "build-public": "cpx \"public/**/*.*\" \"dist/public\" -C",
+    "build-funcs": "babel \"functions\" --out-dir \"dist/functions\"",
+    "build-app": "next build ",
+    "copy-deps": "cpx \"*{package.json,package-lock.json,yarn.lock}\" \"dist/functions\" -C",
+    "install-deps": "cd \"dist/functions\" && npm i"
+  },
+  "engines": {
+    "node": "8"
   },
   "dependencies": {
+    "firebase": "^7.6.0",
+    "firebase-admin": "^8.0.0",
+    "firebase-functions": "^3.1.0",
+    "firebaseui": "^4.3.0",
     "next": "9.1.5",
     "react": "16.12.0",
     "react-dom": "16.12.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.5",
+    "cpx": "^1.5.0",
+    "firebase-functions-test": "^0.1.7",
+    "firebase-tools": "^7.10.0",
+    "rimraf": "^3.0.0"
   }
 }
