@@ -1,0 +1,26 @@
+{
+  "hosting": {
+    "public": "dist/public",
+    "rewrites": [
+      {
+        "source": "/api/login",
+        "function": "login"
+      },
+      {
+        "source": "/api/logout",
+        "function": "logout"
+      },
+      {
+        "source": "/api/user",
+        "function": "user"
+      },
+      {
+        "source": "**/**",
+        "function": "next"
+      }
+    ]
+  },
+  "functions": {
+    "source": "dist/functions"
+  }
+}

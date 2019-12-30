@@ -1,6 +1,7 @@
-import React from 'react'
-import Head from 'next/head'
-import Nav from '../components/nav'
+import React from "react";
+import Head from "next/head";
+import Nav from "../components/nav";
+import Link from "next/link";
 
 const Home = () => (
   <div>
@@ -12,7 +13,12 @@ const Home = () => (
     <Nav />
 
     <div className="hero">
-      <h1 className="title">Welcome to Next.js!</h1>
+      <h1 className="title">
+        Hello{" "}
+        <Link href="/user">
+          <a>[Your Name]</a>
+        </Link>
+      </h1>
       <p className="description">
         To get started, edit <code>pages/index.js</code> and save to reload.
       </p>
@@ -83,6 +89,6 @@ const Home = () => (
       }
     `}</style>
   </div>
-)
+);
 
-export default Home
+export default Home;
