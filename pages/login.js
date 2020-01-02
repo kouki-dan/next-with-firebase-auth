@@ -1,19 +1,23 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
 import firebase from "firebase/app";
 import "firebase/auth";
-
-const loginClicked = () => {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword("user@example.com", "password")
-    .then(user => {
-      location.href = "/";
-    });
-};
+import useFirebaseInitialized from "../hooks/useFirebaseInitialized";
 
 const Login = () => {
+  useFirebaseInitialized(() => {
+    import("firebaseui").then(firebaseui => {
+      const ui =
+        firebaseui.auth.AuthUI.getInstance() ||
+        new firebaseui.auth.AuthUI(firebase.auth());
+      ui.start("#firebaseui-auth-container", {
+        signInSuccessUrl: "/",
+        signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID]
+      });
+    });
+  });
+
   return (
     <div>
       <Head>
@@ -30,9 +34,7 @@ const Login = () => {
           login.
         </p>
 
-        <div className="login">
-          <button onClick={loginClicked}>Login</button>
-        </div>
+        <div className="login" id="firebaseui-auth-container"></div>
       </div>
 
       <style jsx>{`

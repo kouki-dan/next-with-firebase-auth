@@ -2,11 +2,22 @@ import React from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import App from "next/app";
+import { FirebaseInitialized } from "../hooks/useFirebaseInitialized";
 
 class MyApp extends App {
+  constructor(props) {
+    super(props);
+    this.state = {
+      firebaseInitialized: false
+    };
+  }
+
   componentDidMount() {
     fetch("/__/firebase/init.json").then(async response => {
       firebase.initializeApp(await response.json());
+      this.setState({
+        firebaseInitialized: true
+      });
 
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -44,7 +55,11 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps } = this.props;
-    return <Component {...pageProps} />;
+    return (
+      <FirebaseInitialized.Provider value={this.state.firebaseInitialized}>
+        <Component {...pageProps} />
+      </FirebaseInitialized.Provider>
+    );
   }
 }
 
