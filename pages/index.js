@@ -2,8 +2,9 @@ import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
 import Link from "next/link";
+import fetch from "isomorphic-unfetch";
 
-const Home = () => (
+const Home = ({ user }) => (
   <div>
     <Head>
       <title>Home</title>
@@ -16,7 +17,7 @@ const Home = () => (
       <h1 className="title">
         Hello{" "}
         <Link href="/user">
-          <a>[Your Name]</a>
+          <a>{(user && (user.name || user.id)) || ""}</a>
         </Link>
       </h1>
       <p className="description">
@@ -90,5 +91,22 @@ const Home = () => (
     `}</style>
   </div>
 );
+
+Home.getInitialProps = async ({ req }) => {
+  let origin =
+    req && req.headers && req.headers.host
+      ? "http://" + req.headers["x-forwarded-host"]
+      : window.location.origin;
+  const res = await fetch(`${origin}/api/user`, {
+    headers: req && {
+      cookie: req.headers.cookie
+    }
+  });
+  if (!res.ok) {
+    return {};
+  }
+  const json = await res.json();
+  return { user: json.user };
+};
 
 export default Home;
