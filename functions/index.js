@@ -41,7 +41,7 @@ exports.login = functions.https.onRequest(async (req, res) => {
   // When current cookie's uid and setting cookie's uid is same, it renders correctly by SSR.
   // If no, it renders incorrectly because the first page which is rendered by ssr's session uses current cookie
   // but real session user want is setting cookie's one. It needs reloading to use correct cookie by SSR.
-  const cookies = cookie.parse(req.headers.cookie);
+  const cookies = cookie.parse(req.headers.cookie || "");
   var needReload;
   try {
     const currentSession = await admin
@@ -70,7 +70,7 @@ exports.logout = functions.https.onRequest(async (req, res) => {
     res.status(405).json({ error: "Method Not Allowed" });
     return;
   }
-  const cookies = cookie.parse(req.headers.cookie);
+  const cookies = cookie.parse(req.headers.cookie || "");
   const sessionCookie = cookies.__session || "";
   res.clearCookie("__session");
   try {
@@ -89,7 +89,7 @@ exports.user = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  const cookies = cookie.parse(req.headers.cookie);
+  const cookies = cookie.parse(req.headers.cookie || "");
   const sessionCookie = cookies.__session || "";
   var decodedClaims;
   try {

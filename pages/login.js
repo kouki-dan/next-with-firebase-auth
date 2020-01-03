@@ -13,7 +13,10 @@ const Login = () => {
         new firebaseui.auth.AuthUI(firebase.auth());
       ui.start("#firebaseui-auth-container", {
         signInSuccessUrl: "/",
-        signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID]
+        signInOptions: [
+          firebase.auth.EmailAuthProvider.PROVIDER_ID,
+          firebase.auth.GithubAuthProvider.PROVIDER_ID
+        ]
       });
     });
   });

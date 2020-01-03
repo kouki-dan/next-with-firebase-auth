@@ -1,8 +1,9 @@
 import React from "react";
 import Head from "next/head";
 import Nav from "../components/nav";
+import fetch from "isomorphic-unfetch";
 
-const User = () => (
+const User = ({ user }) => (
   <div>
     <Head>
       <title>User</title>
@@ -12,7 +13,7 @@ const User = () => (
     <Nav />
 
     <div className="hero">
-      <h1 className="title">Your name is [Your Name]</h1>
+      <h1 className="title">Your name is {user && (user.name || user.id)}</h1>
     </div>
 
     <style jsx>{`
@@ -34,5 +35,22 @@ const User = () => (
     `}</style>
   </div>
 );
+
+User.getInitialProps = async ({ req }) => {
+  let origin =
+    req && req.headers && req.headers.host
+      ? "http://" + req.headers["x-forwarded-host"]
+      : window.location.origin;
+  const res = await fetch(`${origin}/api/user`, {
+    headers: req && {
+      cookie: req.headers.cookie
+    }
+  });
+  if (!res.ok) {
+    return {};
+  }
+  const json = await res.json();
+  return { user: json.user };
+};
 
 export default User;

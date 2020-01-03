@@ -36,7 +36,7 @@ class MyApp extends App {
               return response.json();
             })
             .then(json => {
-              if (json.needReload) {
+              if (json["need_reload"]) {
                 // If needReload flag is true, cookie's session token is expired but refresing session token from browser is success.
                 // It means SSR rendering with expired session but user has a valid session.
                 // In this case, do reload and use valid cookie's session token which is set from `/api/login` request.
